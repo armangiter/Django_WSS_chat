@@ -3,3 +3,4 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt /code/requirements.txt
 WORKDIR /code/
 RUN pip3 install -r requirements.txt
+RUN python -m pip install -U channels["daphne"]
