@@ -1,0 +1,36 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "python chatbox/manage.py migrate &&
+                    python chatbox/manage.py runserver 0.0.0.0:8080"
+    env_file:
+      - .envs/.env
+    volumes:
+      - .:/code/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - db_network
+
+  db:
+    image: postgres:15.3
+    env_file:
+      - .envs/postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    networks:
+      - db_network
+    restart: always
+
+networks:
+  db_network:
+
+volumes:
+  postgres_volume:
